@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "esModuleInterop":true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "declaration": true,
+      "target": "es2016",
+      "module": "commonjs",
+      "outDir": "./lib",
+      "rootDir": "./src",
+      "sourceMap": true,
+      "incremental": true,
+      "resolveJsonModule": true,
+      "tsBuildInfoFile": "./lib/.tsbuildinfo"
+    }
+  }
+  
