@@ -15,9 +15,10 @@ export class userRouter{
    private  initializeRoutes(): void {
     console.log("inside userrouter::");
 
-    this.router.post("/register", this.userController.registerOne.bind(this.userController));
-    this.router.post("/login", this.userController.loginOne.bind(this.userController));
-    this.router.get("/testing", AuthMiddleware.auth,this.userController.check.bind(this.userController));
+    this.router.post("/user/register", this.userController.registerOne.bind(this.userController));
+    this.router.post("/user/login", this.userController.loginOne.bind(this.userController));
+    this.router.post("/user/:userId/transactions", AuthMiddleware.auth, this.userController.addTransaction.bind(this.userController));
+    this.router.get("/user/:userId/transactions", AuthMiddleware.auth, this.userController.getTransactionDetails.bind(this.userController));
     
   }
 }

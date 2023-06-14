@@ -20,7 +20,8 @@ export interface CustomRequest extends Request {
           throw new Error();
         }
   
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET) as  { _id: string; name: string; isShopkeeper: boolean };
+        console.log("decoded token ", decoded);
         (req as CustomRequest).token = decoded;
   
         next();

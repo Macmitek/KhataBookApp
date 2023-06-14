@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 import * as path from 'path';
 import * as bodyParser from 'body-parser';
 
-import {userRouter} from '../customer/Routes/userRouter';
+import {userRouter} from '../user/Routes/userRouter';
 
 export class App {
   private app: express.Application;
@@ -27,12 +27,12 @@ export class App {
   
 
   private routes(): void {
-    this.app.get('/', (req: Request, res: Response) => {
-      console.log("inside homepage")
-      res.send('Home Page');
-    });
+    // this.app.get('/', (req: Request, res: Response) => {
+    //   console.log("inside homepage")
+    //   res.send('Home Page');
+    // });
 
-    this.app.use('/user', new userRouter().router);
+    this.app.use('/', new userRouter().router);
   }
 
   public start(): void {
