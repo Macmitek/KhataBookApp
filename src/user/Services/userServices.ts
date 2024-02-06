@@ -1,10 +1,10 @@
-import  DocumentDefinition from 'mongoose';
-import {UserModel,IUserDocument, ITransaction} from '../Models/userModel'
 import connectDb from "../../common/mongoconfig";
+import { UserModel, IUserDocument, ITransaction } from '../Models/userModel'
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import jwt  from 'jsonwebtoken';
-import { ShopkeeperModel } from '../../shopkeeper/Models/ShopKeeperModel';
-import { CustomerModel } from '../../customer/Models/CustomerModel';
+import { CustomRequest } from '../../common/auth';
+import { ShopkeeperModel } from "../../shopkeeper/Models/ShopKeeperModel";
+import { CustomerModel } from "../../customer/Models/CustomerModel";
 
 export class UserService {
   public async register(user: any) {
