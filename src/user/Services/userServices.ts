@@ -87,28 +87,58 @@ export class UserService {
     }
   }
 
-  public async getTransactionDetails(userId: string): Promise<ITransaction[] | undefined> {
+  public async getTransactionDetails(userId: string): Promise<ITransaction[] | { customer: string; transactions: ITransaction[] }[] |undefined> {
     try {
-      await this.db.connect();
-      const user = await UserModel.findById(userId);
+        await this.db.connect();
+        console.log("UserID:", userId);
 
-      if (!user) {
-        throw new Error('User not found');
-      }
+        // Step 1: Find the user based on the provided user ID
+        const user = await UserModel.findById(userId);
+        console.log("User:", user);
 
-      if (user.isShopkeeper) {
-        const customer = await CustomerModel.findById(user.customer);
-
-        if (!customer) {
-          throw new Error('Customer not found');
+        if (!user) {
+            throw new Error('User not found');
         }
 
-        return customer.transactionDetails;
-      } else {
-        throw new Error('User is not a shopkeeper');
-      }
+        // Step 2: Check if the user is a shopkeeper
+        if (user.isShopkeeper) {
+            // console.log("User is a shopkeeper");
+            // throw new Error('User is a shopkeeper, cannot retrieve transaction details');
+            console.log("inside getalltransactions data");
+            await this.db.connect();
+      
+            // Step 1: Find all customers
+            const customers = await CustomerModel.find();
+            console.log("all customers : ",customers)
+            // Step 2: Iterate over each customer and retrieve their transaction details
+            const transactionsPerCustomer: { customer: string; transactions: ITransaction[] }[] = [];
+      
+            for (const customer of customers) {
+                transactionsPerCustomer.push({
+                    customer: customer._id.toString(), // Convert ObjectId to string
+                    transactions: customer.transactionDetails,
+                });
+            }
+      
+            return transactionsPerCustomer;
+
+        } else {
+            // Step 3: If the user is a customer, find the corresponding customer
+            console.log("User is a customer");
+            const customer = await CustomerModel.findById(user.customer);
+
+            console.log("Customer:", customer);
+
+            if (!customer) {
+                throw new Error('Customer not found');
+            }
+
+            // Step 4: Retrieve transaction details for the customer
+            return customer.transactionDetails;
+        }
     } catch (error) {
-      throw error;
+        throw error;
     }
-  }
+}
+
 }

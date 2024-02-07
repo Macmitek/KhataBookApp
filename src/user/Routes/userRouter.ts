@@ -15,6 +15,6 @@ export class userRouter{
     this.router.post('/user/register', this.userController.registerOne.bind(this.userController));
     this.router.post('/user/login', this.userController.loginOne.bind(this.userController));
     this.router.post('/user/:userId/transactions', AuthMiddleware.auth, this.userController.addTransaction.bind(this.userController));
-    this.router.get('/user/:userId/gettransactions', AuthMiddleware.auth, this.userController.getTransactionDetails.bind(this.userController));
-}
+    this.router.get('/user/:userId/getTransactions', AuthMiddleware.auth, this.userController.getTransactionDetails.bind(this.userController));
+  }
 }
