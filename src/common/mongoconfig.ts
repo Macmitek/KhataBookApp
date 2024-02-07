@@ -1,24 +1,32 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 import * as path from 'path';
 import { config } from 'dotenv';
 
-const ENV_FILE = path.join(__dirname, '../../', '.env');
-config({ path: ENV_FILE });
+export class ConnectDb {
+    private static instance: ConnectDb;
+    private readonly dbUrl: string;
 
-const dbUrl = process.env.mongo_db_connection_string;
-class ConnectDb {
-  public static connect(): Promise<void> {
+    private constructor() {
+        const ENV_FILE = path.join(__dirname, '../../', '.env');
+        config({ path: ENV_FILE });
+        this.dbUrl = process.env.mongo_db_connection_string || '';
+    }
 
-    console.log("dburl from env ", dbUrl);
+    public static getInstance(): ConnectDb {
+        if (!ConnectDb.instance) {
+            ConnectDb.instance = new ConnectDb();
+        }
+        return ConnectDb.instance;
+    }
 
-    return mongoose
-      .connect(dbUrl, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
-      .then(() => console.log('Database connected', dbUrl))
-      .catch((err) => console.error(err));
-  }
+    public async connect(): Promise<void> {
+        console.log("dburl from env ", this.dbUrl);
+        try {
+            await mongoose.connect(this.dbUrl);
+            console.log('Database connected', this.dbUrl);
+        } catch (error) {
+            console.error('Error connecting to database:', error);
+            throw error;
+        }
+    }
 }
-
-export default ConnectDb;
